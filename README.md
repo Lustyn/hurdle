@@ -1,5 +1,5 @@
 # hurdle
-A small library that implements a tree structure for storing and querying case-insensitive word lists from games like Wordle.
+A small library that implements a data structure for storing and querying case-insensitive word lists from games like Wordle.
 
 ## Usage
 Examples can be found in the [examples](/examples) directory.
