@@ -1,0 +1,16 @@
+{
+  "name": "hurdle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/hurdle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.9",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  }
+}
