@@ -8,11 +8,8 @@ async function main() {
     // Create a Set of unique characters from the word "test"
     const excludeChars = unique("test");
 
-    // Get the subtree of words which do not contain ALL characters in the set
-    const subtree = tree.excludes(excludeChars)
-
-    // Get the words in the subtree
-    const words = subtree.toArray();
+    // Find words in the tree which do not contain ALL characters in the set
+    const words = tree.searchExcludes(excludeChars)
 
     console.log(`The following words do not contain the characters ${setToArray(excludeChars).join(", ")}:`);
     logTruncatedList(words, 10);

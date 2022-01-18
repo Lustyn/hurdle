@@ -7,5 +7,5 @@ export function logTruncatedList(words: string[], truncateAmount: number) {
     const truncatedWords = words.slice(0, truncateAmount);
     console.log(truncatedWords.join(", "));
     if (amountTruncated > 0)
-        console.log(`... and ${amountTruncated} more`);
+        console.log(`... and ${amountTruncated} more (${words.length} total)`);
 }

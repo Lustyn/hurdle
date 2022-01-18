@@ -41,14 +41,15 @@ export const newHurdleTreeNode = (): IHurdleTreeNode => ({
 });
 
 export class HurdleTree {
-    root: IHurdleTreeNode;
+    constructor(
+        public root: IHurdleTreeNode = newHurdleTreeNode(), 
+        public readOnly: boolean = false
+    ) {}
 
-    constructor(root: IHurdleTreeNode = newHurdleTreeNode()) {
-        this.root = root;
-    }
+    // Inserts a word into the tree.
+    insert(word: string): void {
+        if (this.readOnly) throw new Error("Cannot insert into read-only tree.");
 
-    // Inserts a word into the tree
-    insert(word: string) {
         let currentNode = this.root;
         const chars = setToArray(unique(word));
         for (const char of chars) {
@@ -60,65 +61,84 @@ export class HurdleTree {
         currentNode.words.push(word);
     }
 
-    // Inserts many words into the tree
-    insertMany(words: string[]) {
+    // Inserts many words into the tree.
+    insertMany(words: string[]): void {
         for (const word of words)
             this.insert(word);
     }
 
-    // Searches for words which contain ONLY the characters in a given set
-    searchIncludesOnly(includes: Set<AChar>) {
+    // Returns all words in the tree, sorted alphabetically.
+    toArray(): string[] {
         const result: string[] = [];
-
         const search = (node: IHurdleTreeNode) => {
             if (node.words.length > 0)
                 result.push(...node.words);
 
-            for (const char of Object.keys(node.children)) {
-                if (includes.has(char as AChar))
-                    search(node.children[char as AChar]!);
-            }
+            for (const char in node.children)
+                search(node.children[char as AChar]!);
         }
 
         search(this.root);
-        return result;
+        return result.sort((a, b) => a.localeCompare(b));
     }
 
-    // Searches for words which contain ALL characters in a set, at least once
-    searchIncludes(includes: Set<AChar>) {
+    // Returns the subtree of words which contain ALL characters in a set, at least once.
+    includes(includes: Set<AChar>): HurdleTree {
         const lookup = setToArray(includes);
 
         // Lookup subtree
         let currentNode = this.root;
         for (const char of lookup) {
-            if (currentNode.children[char] === undefined)
-                return [];
+            if (currentNode.children[char] === undefined) {
+                currentNode = newHurdleTreeNode();
+                break;
+            }
+
             currentNode = currentNode.children[char]!;
         }
 
-        // Search subtree
-        const result: string[] = [];
-        const search = (node: IHurdleTreeNode) => {
-            if (node.words.length > 0)
-                result.push(...node.words);
-
-            for (const char of Object.keys(node.children)) 
-                search(node.children[char as AChar]!);
-        }
-
-        search(currentNode);
-        return result;
+        return new HurdleTree(currentNode);
     }
 
-    // Search for words which do not contain ALL of the characters in a given set
-    searchExcludes(excludes: Set<AChar>) {
+    // Searches for words which contain ALL characters in a set, at least once.
+    searchIncludes(includes: Set<AChar>): string[] {
+        const subtree = this.includes(includes);
+        return subtree.toArray();
+    }
+
+    // Searches for words which contain ONLY the characters in a set.
+    searchIncludesOnly(includes: Set<AChar>): string[] {
+        const subtree = this.includes(includes);
+        return subtree.root.words;
+    }
+
+    // Returns the subtree of words which do not contain ALL characters in a set.
+    excludes(excludes: Set<AChar>): HurdleTree {
+        const traverse = (node: IHurdleTreeNode): IHurdleTreeNode => {
+            const newNode = newHurdleTreeNode();
+
+            newNode.words = node.words;
+
+            for (const char in node.children) {
+                if (!excludes.has(char as AChar))
+                    newNode.children[char as AChar] = traverse(node.children[char as AChar]!);
+            }
+
+            return newNode;
+        }
+
+        return new HurdleTree(traverse(this.root));
+    }
+
+    // Search for words which do not contain ALL of the characters in a set.
+    searchExcludes(excludes: Set<AChar>): string[] {
         const result: string[] = [];
 
         const search = (node: IHurdleTreeNode) => {
             if (node.words.length > 0)
                 result.push(...node.words);
 
-            for (const char of Object.keys(node.children)) {
+            for (const char in node.children) {
                 if (!excludes.has(char as AChar))
                     search(node.children[char as AChar]!);
             }

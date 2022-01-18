@@ -8,11 +8,12 @@ async function main() {
     // Create a Set of unique characters from the word "test"
     const includeChars = unique("test");
 
-    // Find words in the tree which contain ONLY characters in the set
-    const words = tree.searchIncludesOnly(includeChars)
+    // Find words in the tree which contain ALL characters in the set
+    const words = tree.searchIncludes(includeChars)
 
-    console.log(`The following words contain ONLY the characters ${setToArray(includeChars).join(", ")}:`);
+    console.log(`The following words contain the characters ${setToArray(includeChars).join(", ")}:`);
     logTruncatedList(words, 10);
+    console.assert(words.length === 32, "words.length must be 32");
 };
 
 main().catch(console.error);

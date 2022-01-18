@@ -22,11 +22,16 @@ async function main() {
     }
     console.timeEnd("iter");
 
+    console.time("subtree");
+    const subtree = tree.excludes(testChars);
+    console.timeEnd("subtree");
+
     console.time("query");
-    const queryWords = tree.searchExcludes(testChars)
+    const queryWords = tree.searchExcludes(testChars);
     console.timeEnd("query");
 
     console.assert(iterWords.length === queryWords.length, "iter and query word counts must match");
+    console.assert(subtree.toArray().length === queryWords.length, "subtree and query word counts must match");
 };
 
 main().catch(console.error);
