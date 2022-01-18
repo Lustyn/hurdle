@@ -84,20 +84,19 @@ export class HurdleTree {
 
     // Returns the subtree of words which contain ALL characters in a set, at least once.
     includes(includes: Set<AChar>): HurdleTree {
-        const lookup = setToArray(includes);
+        const traverse = (node: IHurdleTreeNode, charCount: number): IHurdleTreeNode => {
+            const newNode = newHurdleTreeNode();
+            newNode.words = charCount === includes.size ? node.words : [];
 
-        // Lookup subtree
-        let currentNode = this.root;
-        for (const char of lookup) {
-            if (currentNode.children[char] === undefined) {
-                currentNode = newHurdleTreeNode();
-                break;
+            for (const char in node.children) {
+                const newCount = includes.has(char as AChar) ? charCount + 1 : charCount;
+                newNode.children[char as AChar] = traverse(node.children[char as AChar]!, newCount);
             }
 
-            currentNode = currentNode.children[char]!;
+            return newNode;
         }
 
-        return new HurdleTree(currentNode);
+        return new HurdleTree(traverse(this.root, 0));
     }
 
     // Searches for words which contain ALL characters in a set, at least once.
@@ -108,8 +107,17 @@ export class HurdleTree {
 
     // Searches for words which contain ONLY the characters in a set.
     searchIncludesOnly(includes: Set<AChar>): string[] {
-        const subtree = this.includes(includes);
-        return subtree.root.words;
+        const lookup = setToArray(includes);
+
+        // Lookup subtree
+        let currentNode = this.root;
+        for (const char of lookup) {
+            if (currentNode.children[char] === undefined)
+                return [];
+            currentNode = currentNode.children[char]!;
+        }
+
+        return currentNode.words;
     }
 
     // Returns the subtree of words which do not contain ALL characters in a set.
