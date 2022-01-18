@@ -4,47 +4,47 @@ A small library that implements a tree structure for storing and querying case-i
 ## Usage
 Examples can be found in the [examples](/examples) directory.
 
-## `hurdle.hurdle`
-    hurdle(path: string): Promise<HurdleTree>
+## `HurdleBitmap.constructor`
+    constructor(bitmaps?: Map<number, string[]>): HurdleBitmap
 
-Loads a JSON array of words from `path` and returns a `HurdleTree` object. This will cache a copy of the constructed tree to `${path}.hurdle` if one does not already exist, and reload it in subsequent calls.
+Constructs a new `HurdleBitmap`, optionally passing in the bitmaps if you want to use a pre-existing bitmap. This is the fastest data structure to use for querying.
 
 ## `HurdleTree.constructor`
     constructor(root?: IHurdleTreeNode, readOnly?: boolean): HurdleTree
 
-Constructs a new `HurdleTree`, optionally passing in the root node if you want to start with a pre-existing tree. `readOnly` defaults to `false` and can be set to `true` to prevent `insert` from being used on the tree.
+Constructs a new `HurdleTree`, optionally passing in the root node if you want to start with a pre-existing tree. `readOnly` defaults to `false` and can be set to `true` to prevent `insert` from being used on the tree. This is the slower data structure to use for querying.
 
-## `HurdleTree.insert`
+## `IHurdle.insert`
     insert(word: string): void
 
-Inserts a word into the tree.
+Inserts a word into the dataset.
 
-## `HurdleTree.insertMany`
+## `IHurdle.insertMany`
     insertMany(words: string[]): void
 
-Inserts many words into the tree.
+Inserts many words into the dataset.
 
-## `HurdleTree.includes`
-    includes(includes: Set<AChar>): HurdleTree
+## `IHurdle.includes`
+    includes(includes: Set<AChar>): IHurdle
 
-Returns the subtree of words that include ALL the characters in the given set at least once.
+Returns the subset of words that include ALL the characters in the given set at least once.
 
-## `HurdleTree.searchIncludes`
+## `IHurdle.searchIncludes`
     searchIncludes(includes: Set<AChar>): string[]
 
-Searches the tree for words that include ALL the characters in the given set at least once.
+Searches the set for words that include ALL the characters in the given set at least once.
 
-## `HurdleTree.searchIncludesOnly`
+## `IHurdle.searchIncludesOnly`
     searchIncludesOnly(includes: Set<AChar>): string[]
 
-Searches the tree for words that include ONLY the characters in the given set.
+Searches the set for words that include ONLY the characters in the given set.
 
-## `HurdleTree.excludes`
-    excludes(excludes: Set<AChar>): HurdleTree
+## `IHurdle.excludes`
+    excludes(excludes: Set<AChar>): IHurdle
 
-Returns the subtree of words that exclude ALL the characters in the given set. **NOTE**: to avoid mutation, this copies the tree. For faster query time, use `HurdleTree.searchExcludes`.
+Returns the subset of words that exclude ALL the characters in the given set. **NOTE**: to avoid mutation, this copies the tree. For faster query time, use `IHurdle.searchExcludes`.
 
-## `HurdleTree.searchExcludes`
+## `IHurdle.searchExcludes`
     searchExcludes(excludes: Set<AChar>): string[]
 
-Searches the tree for words that exclude ALL the characters in the given set.
+Searches the set for words that exclude ALL the characters in the given set.

@@ -1,5 +1,5 @@
-import { hurdle, setToArray, unique } from "../src/hurdle";
-import { logTruncatedList, WORDS_PATH } from "./utils";
+import { setToArray, unique } from "../src/hurdle";
+import { hurdle, logTruncatedList, WORDS_PATH } from "./utils";
 
 async function main() {
     // Construct a tree from the words in a json file
@@ -16,7 +16,7 @@ async function main() {
 
     console.log(`The following words contain the characters ${setToArray(includeChars).join(", ")}:`);
     logTruncatedList(words, 10);
-    console.assert(words.length === 32, "words.length must be 32");
+    console.assert(words.length === 486, "words.length must be 486");
 };
 
 main().catch(console.error);

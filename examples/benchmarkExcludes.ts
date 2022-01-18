@@ -1,5 +1,5 @@
-import { hurdle, unique } from "../src/hurdle";
-import { WORDS_PATH } from "./utils";
+import { unique } from "../src/hurdle";
+import { hurdle, WORDS_PATH } from "./utils";
 
 async function main() {
     const tree = await hurdle(WORDS_PATH);

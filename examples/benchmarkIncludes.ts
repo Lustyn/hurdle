@@ -1,5 +1,5 @@
-import { hurdle, unique } from "../src/hurdle";
-import { logTruncatedList, WORDS_PATH } from "./utils";
+import { unique } from "../src/hurdle";
+import { hurdle, logTruncatedList, WORDS_PATH } from "./utils";
 
 async function main() {
     const tree = await hurdle(WORDS_PATH);
@@ -20,18 +20,15 @@ async function main() {
         if (count === [...testChars].length) iterWords.push(word);
     }
     console.timeEnd("iter");
-    logTruncatedList(iterWords, 10);
 
     console.time("subtree");
     const subtreeWords = tree.includes(testChars)
                              .toArray();
     console.timeEnd("subtree");
-    logTruncatedList(subtreeWords, 10);
 
     console.time("query");
     const queryWords = tree.searchIncludes(testChars);
     console.timeEnd("query");
-    logTruncatedList(queryWords, 10);
 
     console.assert(iterWords.length === queryWords.length, "iter and query word counts must match");
     console.assert(subtreeWords.length === queryWords.length, "subtree and query word counts must match");

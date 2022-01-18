@@ -1,5 +1,5 @@
-import { hurdle, unique } from "../src/hurdle";
-import { logTruncatedList, WORDS_PATH } from "./utils";
+import { unique } from "../src/hurdle";
+import { hurdle, logTruncatedList, WORDS_PATH } from "./utils";
 
 async function main() {
     // Construct a tree from the words in a json file
