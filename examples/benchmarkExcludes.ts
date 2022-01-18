@@ -1,5 +1,4 @@
 import { hurdle, unique } from "../src/hurdle";
-import * as fs from "fs/promises";
 import { WORDS_PATH } from "./utils";
 
 async function main() {
@@ -7,7 +6,7 @@ async function main() {
 
     const testChars = unique("test");
 
-    const words = JSON.parse(await fs.readFile(WORDS_PATH, "utf8"));
+    const words = tree.toArray();
     console.time("iter");
     let iterWords = [];
     for (const word of words) {
@@ -23,7 +22,8 @@ async function main() {
     console.timeEnd("iter");
 
     console.time("subtree");
-    const subtree = tree.excludes(testChars);
+    const subtreeWords = tree.excludes(testChars)
+                             .toArray();
     console.timeEnd("subtree");
 
     console.time("query");
@@ -31,7 +31,7 @@ async function main() {
     console.timeEnd("query");
 
     console.assert(iterWords.length === queryWords.length, "iter and query word counts must match");
-    console.assert(subtree.toArray().length === queryWords.length, "subtree and query word counts must match");
+    console.assert(subtreeWords.length === queryWords.length, "subtree and query word counts must match");
 };
 
 main().catch(console.error);

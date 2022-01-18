@@ -42,7 +42,7 @@ Searches the tree for words that include ONLY the characters in the given set.
 ## `HurdleTree.excludes`
     excludes(excludes: Set<AChar>): HurdleTree
 
-Returns the subtree of words that exclude ALL the characters in the given set. **NOTE**: to avoid mutation, this copies the tree. For faster query time, use `HurdleTree.excludes`.
+Returns the subtree of words that exclude ALL the characters in the given set. **NOTE**: to avoid mutation, this copies the tree. For faster query time, use `HurdleTree.searchExcludes`.
 
 ## `HurdleTree.searchExcludes`
     searchExcludes(excludes: Set<AChar>): string[]
